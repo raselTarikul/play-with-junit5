@@ -1,4 +1,6 @@
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContactManagerTest {
@@ -49,6 +51,41 @@ public class ContactManagerTest {
             contactManager.addContact("Tarikul", "Islam", null);
         });
     }
+
+    @Test
+    @DisplayName("Should create contact on mac os only")
+    @EnabledOnOs(value = OS.MAC)
+    public void shouldCreateContactOnMackOSOnly(){
+        contactManager.addContact("Tarikul", "Islam", "0987654680");
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+        Assertions.assertTrue(contactManager.getAllContacts().stream().filter(
+                contact -> contact.getFirstName().equals("Tarikul") &&
+                        contact.getLastName().equals("Islam") &&
+                        contact.getPhoneNumber().equals("0987654680")
+        )
+                .findAny()
+                .isPresent());
+    }
+
+    @Test
+    @DisplayName("Should Run on dev env only")
+    public void shouldRunOnDev(){
+        Assumptions.assumeTrue("TEST".equals(System.getProperty("ENV")));
+        contactManager.addContact("Tarikul", "Islam", "0987654680");
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+    // Repeated test
+    @DisplayName("testRepetition test")
+    @RepeatedTest(value = 5, name="Repetition test of {currentRepetition} of {totalRepetitions}")
+    public void testRepetition(){
+        contactManager.addContact("Tarikul", "Islam", "0987654680");
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+
 
     @AfterEach
     public void cleanUp(){
