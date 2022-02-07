@@ -13,92 +13,10 @@ public class ContactManagerTest {
 
     ContactManager contactManager;
 
-    @BeforeAll
-    public void setUpALL(){
-        System.out.println("Db setup will go here");
-    }
 
     @BeforeEach
     public void setUp(){
         contactManager = new ContactManager();
-    }
-
-
-    @Test
-    public void shouldCreateContact(){
-        contactManager.addContact("Tarikul", "Islam", "0987654680");
-        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
-        Assertions.assertEquals(1, contactManager.getAllContacts().size());
-    }
-
-    @Test
-    @DisplayName("Should Fail with null firstname")
-    public void shouldNotCreateContactWhenFirstNameNull(){
-
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            contactManager.addContact(null, "Islam", "0987654680");
-        });
-    }
-
-    @Test
-    @DisplayName("Should Fail with null lastname")
-    public void shouldNotCreateContactWhenLastNameNull(){
-
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            contactManager.addContact("Tarikul", null, "0987654680");
-        });
-    }
-
-    @Test
-    @DisplayName("Should Fail with null phone no")
-    public void shouldNotCreateContactWhenPhoneNumberNull(){
-
-        Assertions.assertThrows(RuntimeException.class, () -> {
-            contactManager.addContact("Tarikul", "Islam", null);
-        });
-    }
-
-    @Test
-    @DisplayName("Should create contact on mac os only")
-    @EnabledOnOs(value = OS.MAC)
-    public void shouldCreateContactOnMackOSOnly(){
-        contactManager.addContact("Tarikul", "Islam", "0987654680");
-        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
-        Assertions.assertEquals(1, contactManager.getAllContacts().size());
-        Assertions.assertTrue(contactManager.getAllContacts().stream().filter(
-                contact -> contact.getFirstName().equals("Tarikul") &&
-                        contact.getLastName().equals("Islam") &&
-                        contact.getPhoneNumber().equals("0987654680")
-        )
-                .findAny()
-                .isPresent());
-    }
-
-    @Test
-    @DisplayName("Should Run on dev env only")
-    public void shouldRunOnDev(){
-        Assumptions.assumeTrue("TEST".equals(System.getProperty("ENV")));
-        contactManager.addContact("Tarikul", "Islam", "0987654680");
-        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
-        Assertions.assertEquals(1, contactManager.getAllContacts().size());
-    }
-    // Repeated test
-    @DisplayName("testRepetition test")
-    @RepeatedTest(value = 5, name="Repetition test of {currentRepetition} of {totalRepetitions}")
-    public void testRepetition(){
-        contactManager.addContact("Tarikul", "Islam", "0987654680");
-        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
-        Assertions.assertEquals(1, contactManager.getAllContacts().size());
-    }
-
-    // Parameterize test
-    @DisplayName("parameterize Test")
-    @ParameterizedTest
-    @ValueSource(strings = {"0987654680", "0987654690", "0987654670"})
-    public void parameterizeTest(String phoneNo){
-        contactManager.addContact("Tarikul", "Islam", phoneNo);
-        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
-        Assertions.assertEquals(1, contactManager.getAllContacts().size());
     }
 
     @DisplayName("parameterize Test")
@@ -110,7 +28,7 @@ public class ContactManagerTest {
         Assertions.assertEquals(1, contactManager.getAllContacts().size());
     }
 
-    private static List<String> getPhoneNo(){
+    private List<String> getPhoneNo(){
         return Arrays.asList("0987654680", "0987654690", "0987654670");
     }
 
@@ -119,10 +37,93 @@ public class ContactManagerTest {
         System.out.println("Clean up");
     }
 
-    @AfterAll
-    public void cleanAll(){
-        System.out.println("Clean all");
+@Nested
+    class Normaltest{
+        @Test
+        public void shouldCreateContact(){
+            contactManager.addContact("Tarikul", "Islam", "0987654680");
+            Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+            Assertions.assertEquals(1, contactManager.getAllContacts().size());
+        }
+
+        @Test
+        @DisplayName("Should Fail with null firstname")
+        public void shouldNotCreateContactWhenFirstNameNull(){
+
+            Assertions.assertThrows(RuntimeException.class, () -> {
+                contactManager.addContact(null, "Islam", "0987654680");
+            });
+        }
+
+        @Test
+        @DisplayName("Should Fail with null lastname")
+        public void shouldNotCreateContactWhenLastNameNull(){
+
+            Assertions.assertThrows(RuntimeException.class, () -> {
+                contactManager.addContact("Tarikul", null, "0987654680");
+            });
+        }
+
+        @Test
+        @DisplayName("Should Fail with null phone no")
+        public void shouldNotCreateContactWhenPhoneNumberNull(){
+
+            Assertions.assertThrows(RuntimeException.class, () -> {
+                contactManager.addContact("Tarikul", "Islam", null);
+            });
+        }
+
+        @Test
+        @DisplayName("Should create contact on mac os only")
+        @EnabledOnOs(value = OS.MAC)
+        public void shouldCreateContactOnMackOSOnly(){
+            contactManager.addContact("Tarikul", "Islam", "0987654680");
+            Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+            Assertions.assertEquals(1, contactManager.getAllContacts().size());
+            Assertions.assertTrue(contactManager.getAllContacts().stream().filter(
+                            contact -> contact.getFirstName().equals("Tarikul") &&
+                                    contact.getLastName().equals("Islam") &&
+                                    contact.getPhoneNumber().equals("0987654680")
+                    )
+                    .findAny()
+                    .isPresent());
+        }
+
     }
+
+    @Nested
+    class RepetedTest{
+        @Test
+        @DisplayName("Should Run on dev env only")
+        public void shouldRunOnDev(){
+            Assumptions.assumeTrue("TEST".equals(System.getProperty("ENV")));
+            contactManager.addContact("Tarikul", "Islam", "0987654680");
+            Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+            Assertions.assertEquals(1, contactManager.getAllContacts().size());
+        }
+        // Repeated test
+        @DisplayName("testRepetition test")
+        @RepeatedTest(value = 5, name="Repetition test of {currentRepetition} of {totalRepetitions}")
+        public void testRepetition(){
+            contactManager.addContact("Tarikul", "Islam", "0987654680");
+            Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+            Assertions.assertEquals(1, contactManager.getAllContacts().size());
+        }
+
+        // Parameterize test
+        @DisplayName("parameterize Test")
+        @ParameterizedTest
+        @ValueSource(strings = {"0987654680", "0987654690", "0987654670"})
+        public void parameterizeTest(String phoneNo){
+            contactManager.addContact("Tarikul", "Islam", phoneNo);
+            Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+            Assertions.assertEquals(1, contactManager.getAllContacts().size());
+        }
+
+
+    }
+
+
 
 
 }
