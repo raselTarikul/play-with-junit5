@@ -1,11 +1,12 @@
 import org.junit.jupiter.api.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContactManagerTest {
 
     ContactManager contactManager;
 
     @BeforeAll
-    public static void setUpALL(){
+    public void setUpALL(){
         System.out.println("Db setup will go here");
     }
 
@@ -17,7 +18,6 @@ public class ContactManagerTest {
 
     @Test
     public void shouldCreateContact(){
-        ContactManager contactManager = new ContactManager();
         contactManager.addContact("Tarikul", "Islam", "0987654680");
         Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
         Assertions.assertEquals(1, contactManager.getAllContacts().size());
@@ -26,7 +26,6 @@ public class ContactManagerTest {
     @Test
     @DisplayName("Should Fail with null firstname")
     public void shouldNotCreateContactWhenFirstNameNull(){
-        ContactManager contactManager = new ContactManager();
 
         Assertions.assertThrows(RuntimeException.class, () -> {
             contactManager.addContact(null, "Islam", "0987654680");
@@ -36,7 +35,6 @@ public class ContactManagerTest {
     @Test
     @DisplayName("Should Fail with null lastname")
     public void shouldNotCreateContactWhenLastNameNull(){
-        ContactManager contactManager = new ContactManager();
 
         Assertions.assertThrows(RuntimeException.class, () -> {
             contactManager.addContact("Tarikul", null, "0987654680");
@@ -46,11 +44,21 @@ public class ContactManagerTest {
     @Test
     @DisplayName("Should Fail with null phone no")
     public void shouldNotCreateContactWhenPhoneNumberNull(){
-        ContactManager contactManager = new ContactManager();
 
         Assertions.assertThrows(RuntimeException.class, () -> {
             contactManager.addContact("Tarikul", "Islam", null);
         });
     }
+
+    @AfterEach
+    public void cleanUp(){
+        System.out.println("Clean up");
+    }
+
+    @AfterAll
+    public void cleanAll(){
+        System.out.println("Clean all");
+    }
+
 
 }
