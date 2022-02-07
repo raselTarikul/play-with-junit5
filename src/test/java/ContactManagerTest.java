@@ -1,8 +1,19 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class ContactManagerTest {
+
+    ContactManager contactManager;
+
+    @BeforeAll
+    public static void setUpALL(){
+        System.out.println("Db setup will go here");
+    }
+
+    @BeforeEach
+    public void setUp(){
+        contactManager = new ContactManager();
+    }
+
 
     @Test
     public void shouldCreateContact(){
