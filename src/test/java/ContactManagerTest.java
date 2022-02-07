@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContactManagerTest {
@@ -85,7 +87,15 @@ public class ContactManagerTest {
         Assertions.assertEquals(1, contactManager.getAllContacts().size());
     }
 
-
+    // Parameterize test
+    @DisplayName("parameterize Test")
+    @ParameterizedTest
+    @ValueSource(strings = {"0987654680", "0987654690", "0987654670"})
+    public void parameterizeTest(String phoneNo){
+        contactManager.addContact("Tarikul", "Islam", phoneNo);
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
 
     @AfterEach
     public void cleanUp(){
