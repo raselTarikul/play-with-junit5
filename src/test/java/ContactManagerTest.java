@@ -2,7 +2,11 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.Arrays;
+import java.util.List;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ContactManagerTest {
@@ -95,6 +99,19 @@ public class ContactManagerTest {
         contactManager.addContact("Tarikul", "Islam", phoneNo);
         Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
         Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+    @DisplayName("parameterize Test")
+    @ParameterizedTest
+    @MethodSource("getPhoneNo")
+    public void parameterizeTestMethodSource(String phoneNo){
+        contactManager.addContact("Tarikul", "Islam", phoneNo);
+        Assertions.assertFalse(contactManager.getAllContacts().isEmpty());
+        Assertions.assertEquals(1, contactManager.getAllContacts().size());
+    }
+
+    private static List<String> getPhoneNo(){
+        return Arrays.asList("0987654680", "0987654690", "0987654670");
     }
 
     @AfterEach
