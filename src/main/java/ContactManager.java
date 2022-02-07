@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,6 +11,10 @@ public class ContactManager {
         validateContact(contact);
         checkIfContactAlreadyExist(contact);
         contactList.put(generateKey(contact), contact);
+    }
+
+    public Collection<Contact> getAllContacts() {
+        return contactList.values();
     }
 
     private void checkIfContactAlreadyExist(Contact contact) {
